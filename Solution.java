@@ -35,52 +35,40 @@ class ListNode {
 }
 
 class Solution {
+
 	static ListNode mergeTwoLists(ListNode list1, ListNode list2) {
 		/**
-		 * If one of the list is null, just return the other
+		 * Initialize the merged list. Please note that an addtional node (the
+		 * first one) is introduced, which should be eliminated later
 		 */
-		if (null == list1) {
-			return list2;
-		}
+		ListNode merged = new ListNode(0);
 
-		if (null == list2) {
-			return list1;
-		}
-
-		ListNode workList, checkList, mergedList;
-		/**
-		 * Initialize mergedList, and set up workList and checkList respectively
-		 */
-		if (list1.val > list2.val) {
-			workList = list2;
-			checkList = list1;
-			mergedList = new ListNode(list2.val);
-		} else {
-			workList = list1;
-			checkList = list2;
-			mergedList = new ListNode(list1.val);
-		}
-	
-		workList = workList.next;
-		while (null != workList) {
-			/**
-			 * Append the elements in workList to mergedList, while it hasn't reached the end and their value
-			 * isn't larger then the current element of the checkList if the checkList isn't null
-			 */
-			while (null != workList && (null == checkList || workList.val <= checkList.val))  {
-				mergedList.append(workList.val);
-				workList = workList.next;
+		while (null != list1 && null != list2) {
+			if (list1.val <= list2.val) {
+				merged.append(list1.val);
+				list1 = list1.next;
+			} else {
+				merged.append(list2.val);
+				list2 = list2.next;
 			}
-
-			/**
-			 * Then swap the workList and checkList
-			 */
-			ListNode tempList = workList;
-			workList = checkList;
-			checkList = tempList;
 		}
 
-		return mergedList;
+		ListNode remained;
+		if (null != list1) {
+			remained = list1;
+		} else {
+			remained = list2;
+		}
+
+		while (null != remained) {
+			merged.append(remained.val);
+			remained = remained.next;
+		}
+
+		/**
+		 * Eliminate the firt node
+		 */
+		return merged.next;
 	}
 
 	/**
